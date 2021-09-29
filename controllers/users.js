@@ -1,7 +1,9 @@
-const { users } = require('../data')
+const { users } = require('../data');
+const { sequelize, User} = require('../models');
 
-const getAllUsers = (req, res) => {
-    return res.status(200).json(users)
+const getAllUsers = async (req, res) => {
+    const userData = await User.findAll();
+    return res.status(200).json(userData)
 }
 
 const getSpecificUsers = (req, res) => {
@@ -16,7 +18,19 @@ const getSpecificUsers = (req, res) => {
     return res.status(200).json(singleUser)
 }
 
+const createUser = async (req, res) => {
+    // dev
+    users.forEach(async (user) => {
+        await User.create(user);
+    })
+    const userData = await User.findAll();
+    console.log(userData);
+    
+    return res.status(200).json(userData)
+}
+
 module.exports = {
     getAllUsers,
-    getSpecificUsers
+    getSpecificUsers,
+    createUser
 }
