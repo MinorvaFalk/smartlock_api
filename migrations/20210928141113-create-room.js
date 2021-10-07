@@ -1,4 +1,7 @@
 'use strict';
+
+const { sequelize } = require("../models");
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Rooms', {
@@ -9,9 +12,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       capacity: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      status:{
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      node_id: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -22,10 +35,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      node_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      }
     });
   },
   down: async (queryInterface, Sequelize) => {

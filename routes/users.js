@@ -1,4 +1,7 @@
 const express = require('express')
+const { userRequest } = require('../requests/userRequest');
+const { validate } = require('../helpers/validate');
+
 const router = express.Router()
 
 const {
@@ -13,7 +16,7 @@ router.use(jwtHandler)
 // Get all
 router.get('/', getAllUsers)
 
-router.get('/create', createUser)
+router.post('/create', userRequest(), validate, createUser)
   
 // Get specific nim
 router.get('/:nim', getSpecificUsers)
