@@ -1,6 +1,7 @@
 const Booking = require('../MongoModels/booking');
 
-const getAllBooking = (req, res) => {
+const getAllBooking = async (req, res) => {
+    const booking = await Booking.find();
     return res.status(200).json(booking)
 }
 
@@ -20,6 +21,7 @@ const createNewBooking = (req, res) => {
     const booking = new Booking({
         start_date: Date.now(),
         end_date: Date.now(),
+        check_in: Date.now(),
         start_time: '12345',
         duration: 25,
         room_id: 45,

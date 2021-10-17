@@ -11,10 +11,14 @@ const jwtHandler = require('../middleware/jwtHandler')
 router.use(jwtHandler)
 
 // Get All Booking
-router.get('/', createNewBooking)
+router.get('/', getAllBooking)
+
+// Post Booking
+router.post('/', createNewBooking)
 
 // Get Specific Booking ID
 router.get('/:id', getSpecificBooking)
+
 
 
 

@@ -14,6 +14,12 @@ const BookingSchema = new Schema({
         type: String,
         required: true,
     },
+    check_in: {
+        type: Date,
+    },
+    check_out: {
+        type: Date,
+    },
     duration: {
         type: Number,
         required: true,
@@ -21,6 +27,14 @@ const BookingSchema = new Schema({
     room_id: {
         type: String,
         required: true,
+    },
+    status: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
+    description: {
+        type: String,
     },
     participant: Array
 }, {timestamps: true})

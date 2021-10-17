@@ -22,7 +22,7 @@ app.use('/api/auth/', auth)
 app.use('/api/bookings/', booking)
 
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
   res.send('API online')
 })
 
