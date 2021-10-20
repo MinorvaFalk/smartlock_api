@@ -1,7 +1,7 @@
 const { users } = require('../data');
 const { sequelize, User} = require('../models');
 const user = require('../models/user');
-
+const bcrypt = require("bcrypt");
 
 const getAllUsers = async (req, res) => {
     const userData = await User.findAll();
@@ -26,16 +26,11 @@ const getSpecificUsers = async (req, res) => {
 
 
 const createUser = async (req, res) => {
-    const errors = validationResult(req);
 
-    console.log(errors);
+    const salt = await bcrypt.genSalt(10);
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    req.body.password = await bcrypt.hash(req.body.password, salt);
 
-    //TODO: add bcrypt on req body
-    
     let userData = await User.create(req.body);
 
     return res.status(200).json(userData)

@@ -1,12 +1,18 @@
-const { users } = require('../data')
+const { User } = require('../models');
 const bcrypt = require('bcrypt')
 
-const checkLogin = (req, res) => {
+const checkLogin = async (req, res) => {
     const { email, password } = req.body
 
     // Search for corresponding email
-    const searchEmail = users.find((user) => user.email === email)
+    const searchEmail = await User.findOne({
+        where: {
+            email: email,
+        }
+    });
 
+    console.log(searchEmail);
+    
     if(searchEmail){
         bcrypt.compare(password, searchEmail.password, function(err, result) {
             if(result){
@@ -14,9 +20,12 @@ const checkLogin = (req, res) => {
 
                 return res.status(200).send(`Welcome ${email}`)
             }
+            else {
+                return res.status(401).send('Wrong Credentials')
+            }
         });
     }else {
-        res.status(401).send('Invalid Credentials')
+        return res.status(401).send('Invalid Credentials')
     }
 }
 
