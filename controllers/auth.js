@@ -10,8 +10,6 @@ const checkLogin = async (req, res) => {
             email: email,
         }
     });
-
-    console.log(searchEmail);
     
     if(searchEmail){
         bcrypt.compare(password, searchEmail.password, function(err, result) {
