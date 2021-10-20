@@ -3,7 +3,8 @@ const router = express.Router()
 
 const { 
     getAllBooking,
-    getSpecificBooking 
+    getSpecificBooking,
+    createNewBooking
 } = require('../controllers/booking')
 
 const jwtHandler = require('../middleware/jwtHandler')
@@ -12,7 +13,13 @@ router.use(jwtHandler)
 // Get All Booking
 router.get('/', getAllBooking)
 
+// Post Booking
+router.post('/', createNewBooking)
+
 // Get Specific Booking ID
 router.get('/:id', getSpecificBooking)
+
+
+
 
 module.exports = router

@@ -14,13 +14,15 @@ app.use(express.static('./static'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
+require('./mongo-connect');
+
 app.use(logger)
 app.use('/api/users/', users)
 app.use('/api/auth/', auth)
 app.use('/api/bookings/', booking)
 
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
   res.send('API online')
 })
 

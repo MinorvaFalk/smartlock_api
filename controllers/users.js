@@ -26,14 +26,6 @@ const getSpecificUsers = async (req, res) => {
 
 
 const createUser = async (req, res) => {
-    // dev
-    // users.forEach(async (user) => {
-    //     await User.create(user);
-    // })
-    // const userData = await User.findAll();
-    // console.log(userData);
-
-    // prod
     const errors = validationResult(req);
 
     console.log(errors);
@@ -42,9 +34,11 @@ const createUser = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // let userData = await User.create(req.body);
+    //TODO: add bcrypt on req body
+    
+    let userData = await User.create(req.body);
 
-    // return res.status(200).json(userData)
+    return res.status(200).json(userData)
 }
 
 module.exports = {
