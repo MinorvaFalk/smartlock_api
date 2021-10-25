@@ -9,7 +9,6 @@ const booking = require('./routes/booking')
 
 const logger = require('./middleware/logger')
 
-
 app.use(express.static('./static'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
