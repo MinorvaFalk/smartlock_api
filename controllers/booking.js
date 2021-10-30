@@ -1,4 +1,5 @@
 const Booking = require('../MongoModels/booking');
+const currentUserHandler = require('../middleware/currentUserHandler')
 
 const getAllBooking = async (req, res) => {
     const booking = await Booking.find();
@@ -8,12 +9,13 @@ const getAllBooking = async (req, res) => {
 const getSpecificBooking = (req, res) => {
     const { id } = req.params
 
-    const singleBooking = booking.find((data) => data.id === Number(id))
-
+    const singleBooking = Booking.find((data) => data.id === Number(id))
+ 
     if(!singleBooking) {
         return res.status(404).send('ID not found')
     }
 
+        
     return res.json(singleBooking)
 }
 
@@ -25,7 +27,8 @@ const createNewBooking = (req, res) => {
         start_time: '12345',
         duration: 25,
         room_id: 45,
-        participant: [123,456]
+        user_booking_nim: '000000027458',
+        participant: [123,456],
     })
     booking
         .save()
@@ -33,8 +36,39 @@ const createNewBooking = (req, res) => {
         .catch((err) => console.log(err))
 }
 
+const editBooking = (req, res) => {
+    const { id } = req.params
+
+    const singleBooking = Booking.find((data) => data.id === Number(id))
+ 
+    if(!singleBooking) {
+        return res.status(404).send('ID not found')
+    }
+
+    if(!currentUserHandler(req, singleBooking)) {
+        return res.sendStatus(403);
+    }
+}
+
+const editStatusBooking = (req, res) => {
+    const { id, status } = req.params
+
+    const singleBooking = Booking.find((data) => data.id === Number(id))
+ 
+    if(!singleBooking) {
+        return res.status(404).send('ID not found')
+    }
+
+    Booking.updateOne({status: status}, (err, res) => {
+        if(err) return res.sendStatus(500);
+        return res.status(200).send('Booking status updated');
+    })
+}
+
 module.exports = {
     getAllBooking,
     getSpecificBooking,
-    createNewBooking
+    createNewBooking,
+    editBooking,
+    editStatusBooking
 }

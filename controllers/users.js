@@ -1,10 +1,15 @@
 const { users } = require('../data');
-const { sequelize, User} = require('../models');
+const { Sequelize, User} = require('../models');
 const user = require('../models/user');
 const bcrypt = require("bcrypt");
+const Op = Sequelize.Op;
 
 const getAllUsers = async (req, res) => {
-    const userData = await User.findAll();
+    const userData = await User.findAll({
+        where: {
+            [Op.not]: {role: 'admin'}
+        }
+    });
     return res.status(200).json(userData)
 }
 
