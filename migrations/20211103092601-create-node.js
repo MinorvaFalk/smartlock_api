@@ -21,6 +21,9 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'Not Active'
       },
+      last_check: {
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -10,10 +10,6 @@ const BookingSchema = new Schema({
         type: Date,
         required: true,
     },
-    start_time: {
-        type: String,
-        required: true,
-    },
     check_in: {
         type: Date,
     },

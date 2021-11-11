@@ -20,26 +20,19 @@ const getSpecificBooking = (req, res) => {
 }
 
 const createNewBooking = (req, res) => {
-    const booking = new Booking({
-        start_date: Date.now(),
-        end_date: Date.now(),
-        check_in: Date.now(),
-        start_time: '12345',
-        duration: 25,
-        room_id: 45,
-        user_booking_nim: '000000027458',
-        participant: [123,456],
-    })
+    const booking = new Booking(
+        req.body
+    )
     booking
         .save()
         .then((response) => res.status(200).send({'booking': response}))
         .catch((err) => console.log(err))
 }
 
-const editBooking = (req, res) => {
+const editBooking = async (req, res) => {
     const { id } = req.params
 
-    const singleBooking = Booking.find((data) => data.id === Number(id))
+    const singleBooking = await Booking.find((data) => data.id === Number(id))
  
     if(!singleBooking) {
         return res.status(404).send('ID not found')
@@ -50,10 +43,10 @@ const editBooking = (req, res) => {
     }
 }
 
-const editStatusBooking = (req, res) => {
+const editStatusBooking = async (req, res) => {
     const { id, status } = req.params
 
-    const singleBooking = Booking.find((data) => data.id === Number(id))
+    const singleBooking = await Booking.find((data) => data.id === Number(id))
  
     if(!singleBooking) {
         return res.status(404).send('ID not found')

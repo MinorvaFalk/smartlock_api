@@ -32,8 +32,6 @@ app.get('*', (req, res) => {
   res.status(404).send('Routes not found')
 })
 
-
-
 app.listen(port, () => {
   console.log(`Server is listening on http://localhost:${port}`)
 })

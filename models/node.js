@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   Node.init({
     name: DataTypes.STRING,
     version: DataTypes.INTEGER,
-    status: DataTypes.STRING
+    status: DataTypes.STRING,
+    last_check: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Node',
