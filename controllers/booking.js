@@ -42,14 +42,15 @@ const createNewBooking = async (req, res) => {
 
     const end_date = new Date(req.body.end_date);
 
-    const book_time = new Date(date+'T'+start_time+'+0700');
-    const booked_time = new Date(date+'T'+start_time+'+0700');
+    const booked_time = new Date(req.body.start_date);
 
     booked_time.setHours(-1)
 
-    const booked_room = await Booking.find({start_date: {$lte: book_time, $gte: booked_time}, duration: {$lte: 120, $gte: 60}, end_date: {$ne: book_time}});
+    const booked_room = await Booking.find({start_date: {$lte: start_date, $gte: booked_time}, duration: {$lte: 120, $gte: 60}, end_date: {$ne: start_date}});
 
-    if (booked_room) return res.sendStatus(422).json({message: "Time is not available"})
+    console.log(booked_room)
+
+    if (booked_room.length > 0) return res.status(422).json({message: "Time is not available"})
 
     req.body.duration = (end_date.getHours() - start_date.getHours()) * 60;
 
@@ -118,7 +119,18 @@ const checkAvailability = async (req, res) => {
 
     return res.sendStatus(200)
 
+}
 
+const getAllUserBooking = async (req, res) => {
+    const { nim } = req.params;
+
+    if( !nim ) return res.sendStatus(400)
+
+    const booking = await Booking.find({user_booking_nim: nim});
+
+    if (!booking) return res.sendStatus(422);
+
+    return res.status(200).send(booking);
 }
 
 module.exports = {
@@ -128,5 +140,6 @@ module.exports = {
     editBooking,
     editStatusBooking,
     checkAvailability,
-    deleteSpecificBooking
+    deleteSpecificBooking,
+    getAllUserBooking
 }

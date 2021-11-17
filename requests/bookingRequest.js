@@ -16,6 +16,7 @@ let bookingRequest = () => {
             .isNumeric().withMessage('Must Be Numeric Value').bail()
             .custom(async value => {
                 let user = await User.findAll({where: {nim: value}})
+                console.log(user)
                 if(!user.length > 0) return Promise.reject('nim is not found')
             }),
 

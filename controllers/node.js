@@ -18,15 +18,31 @@ const createNode = async (req, res) => {
 }
 
 const deleteSpecificNode = async (req, res) => {
-    return res.status(200)
+    const { id } = req.params;
+
+    const node = await Node.findOne({where: {id: id}});
+
+    if (node == null) return res.sendStatus(422) 
+
+    node.destroy().then(() => {
+        return res.sendStatus(200)
+    }).catch((err) => {
+        console.log(error);
+        return res.sendStatus(500)
+    })
 }
 
 const checkActiveNode = async (req, res) => {
     const { id } = req.params;
+
     const node = await Node.findOne({where: {id: id}});
-    if(node === 'null') res.status(204) 
+
+    if (node === 'null') res.status(204) 
+
     node.status = 'active';
+
     await node.save()
+
     return res.status(200);
 }
 

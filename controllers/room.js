@@ -1,27 +1,72 @@
 const { Room, Node } = require('../models');
 
-const checkBooking = (req, res) => {
-    const id = req.body.id;
-    // const Room = await Room.findOne({where: {node_id: id}});
-    return res.status(200).send(id)
+const getSpecificRoom = async (req, res) => {
+    const { id } = req.params
+
+    const room = await Room.findByPk(id);
+
+    if (room == null) return res.sendStatus(422)
+
+    return res.status(200).send(room);
+}
+
+const editSpecificRoom = async (req, res) => {
+    const { id } = req.params
+
+    const room = await Room.findByPk(id);
+
+    if (room == null) return res.sendStatus(422)
+
+    Room
+        .update(req.body, { where: { id: id } })
+        .then(async () => {
+            const room = await Room.findByPk(id)
+            return res.status(200).send(room)
+        })
+        .catch((err) => {
+            return res.sendStatus(500)
+        })
+
 }
 
 const createRoom = async (req, res) => {
     const room = await Room.create(req.body);
+
     await Node.update(
-        {RoomId: room.id},
-        {where: {id: req.body.NodeId}}
-        )
+        { RoomId: room.id },
+        { where: { id: req.body.NodeId } }
+    )
+
     return res.status(200).json(room);
 }
 
+const deleteSpecificRoom = async (req, res) => {
+    const { id } = req.params
+
+    if (id == null) return res.sendStatus(404);
+
+    const room = await Room.findByPk(id);
+
+    room
+        .destroy()
+        .then(() => {
+            return res.sendStatus(200)
+        })
+        .catch((err) => {
+            console.log(err)
+            return res.sendStatus(500)
+        })
+}
+
 const getAllRooms = async (req, res) => {
-    const rooms = await Room.findAll({ include: Node});
+    const rooms = await Room.findAll({ include: Node });
     return res.status(200).json(rooms);
 }
 
 module.exports = {
-    checkBooking,
+    editSpecificRoom,
+    getSpecificRoom,
+    deleteSpecificRoom,
     createRoom,
     getAllRooms
 }

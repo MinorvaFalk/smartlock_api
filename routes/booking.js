@@ -12,7 +12,8 @@ const {
     editBooking,
     editStatusBooking,
     checkAvailability,
-    deleteSpecificBooking
+    deleteSpecificBooking,
+    getAllUserBooking
 } = require('../controllers/booking')
 
 const jwtHandler = require('../middleware/jwtHandler')
@@ -20,6 +21,9 @@ router.use(jwtHandler)
 
 // Get All Booking
 router.get('/',  getAllBooking)
+
+// Get All User Booking
+router.get('/user/:nim', getAllUserBooking);
 
 // Post Booking
 router.post('/', bookingRequest(), validate, createNewBooking)
