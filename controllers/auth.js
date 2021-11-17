@@ -15,7 +15,7 @@ const checkLogin = async (req, res) => {
     if (user) {
         bcrypt.compare(password, user.password, function (err, result) {
             if (result) {
-                jwt.sign({ nim: user.nim }, process.env.JWT_SECRET, function (err, token) {
+                jwt.sign({ nim: user.nim, role: user.role }, process.env.JWT_SECRET, function (err, token) {
                     if (token) return res.status(200).send({ token: token })
                     else return res.status(500).send('jwt error');
                 })

@@ -1,6 +1,7 @@
 const express = require('express')
 const { userRequest } = require('../requests/userRequest');
 const { validate } = require('../helpers/validate');
+const adminHandler = require('../middleware/adminHandler')
 
 const router = express.Router()
 
@@ -16,7 +17,7 @@ router.use(jwtHandler)
 // Get all
 router.get('/', getAllUsers)
 
-router.post('/create', userRequest(), validate, createUser)
+router.post('/create', adminHandler, userRequest(), validate, createUser)
   
 // Get specific nim
 router.get('/:nim', getSpecificUsers)

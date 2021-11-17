@@ -1,10 +1,7 @@
 'use strict';
-
-const { sequelize } = require("../models");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Rooms', {
+    await queryInterface.createTable('Nodes', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,17 +9,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        type: Sequelize.STRING,
         allowNull: false,
-        type: Sequelize.STRING
       },
-      capacity: {
+      version: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        type: Sequelize.INTEGER
+        defaultValue: '1'
       },
-      status:{
-        allowNull: false,
-        defaultValue: 'Available',
-        type: Sequelize.STRING
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: 'Not Active'
+      },
+      last_check: {
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +35,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Rooms');
+    await queryInterface.dropTable('Nodes');
   }
 };

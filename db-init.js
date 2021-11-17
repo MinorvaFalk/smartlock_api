@@ -19,7 +19,10 @@ client
     .then(() => {
         console.log('db created');
         client.end()
-        spawn("npx", ["sequelize-cli","db:migrate"], { stdio: 'inherit' , shell: true});
+        const migrate = spawn("npx", ["sequelize-cli","db:migrate"], { stdio: 'inherit' , shell: true});
+        migrate.on('exit', () => {
+            spawn("npx", ["sequelize-cli","db:seed:all"], { stdio: 'inherit' , shell: true});
+        })
     }
     )
     .catch((err) => {

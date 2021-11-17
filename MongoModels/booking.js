@@ -10,10 +10,6 @@ const BookingSchema = new Schema({
         type: Date,
         required: true,
     },
-    start_time: {
-        type: String,
-        required: true,
-    },
     check_in: {
         type: Date,
     },
@@ -29,9 +25,13 @@ const BookingSchema = new Schema({
         required: true,
     },
     status: {
-        type: Boolean,
+        type: String,
         required: true,
-        default: false,
+        default: 'Waiting',
+    },
+    user_booking_nim: {
+        type: String,
+        required: true,
     },
     description: {
         type: String,

@@ -10,13 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.hasOne(models.Node)
     }
   };
   Room.init({
     name: DataTypes.STRING,
     capacity: DataTypes.INTEGER,
-    node_id: DataTypes.INTEGER,
     status: DataTypes.INTEGER,
   }, {
     sequelize,
