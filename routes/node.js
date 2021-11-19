@@ -7,15 +7,18 @@ const {
     checkRoom,
     getAllNode,
     getSpecificNode,
-    deleteSpecificNode
+    deleteSpecificNode,
+    editNode
 } = require('../controllers/node');
+const { validate } = require('../helpers/validate');
 const adminHandler = require('../middleware/adminHandler');
+const { nodeRequest } = require('../requests/nodeRequest');
 
 router.get('/', adminHandler, getAllNode)
 
 router.post('/create', adminHandler, createNode);
 
-router.put('/:id/edit', adminHandler, createNode);
+router.put('/:id/edit', adminHandler, nodeRequest(), validate, editNode);
 
 router.post('/:id/check', checkRoom);
 

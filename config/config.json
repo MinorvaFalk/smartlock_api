@@ -12,7 +12,7 @@
     "password": null,
     "database": "database_test",
     "host": "127.0.0.1",
-    "dialect": "pgsql"
+    "dialect": "postgres"
   },
   "development_heroku": {
     "username": "wlhluxdznwmevl",
@@ -27,6 +27,6 @@
     "password": null,
     "database": "database_production",
     "host": "127.0.0.1",
-    "dialect": "pgsql"
+    "dialect": "postgres"
   }
 }
