@@ -3,7 +3,13 @@ const config = require(__dirname + '/config/config.json')[env];
 const { Client } = require('pg');
 var spawn = require('child_process').spawn;
 
-const client = new Client(config)
+const client = new Client({
+    user: config.username,
+    password: config.password,
+    host: config.host,
+    port: config.port,
+    ssl: true,
+})
 
 client
     .connect()
