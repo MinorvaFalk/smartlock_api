@@ -2,7 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const app = express();
+const app = express()
+const port = process.env.PORT || 3000;
 
 const users = require('./routes/users')
 const auth = require('./routes/auth')
@@ -36,7 +37,7 @@ app.get('*', (req, res) => {
   res.status(404).send('Routes not found')
 })
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(prompt, () => {
   console.log(`Server is listening on http://localhost:${port}`)
 })
 
