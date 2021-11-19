@@ -2,8 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const app = express()
-const port = 3000
+const app = express();
 
 const users = require('./routes/users')
 const auth = require('./routes/auth')
@@ -37,7 +36,7 @@ app.get('*', (req, res) => {
   res.status(404).send('Routes not found')
 })
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is listening on http://localhost:${port}`)
 })
 
