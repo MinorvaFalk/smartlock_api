@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const checkLogin = async (req, res) => {
     const { email, password } = req.body
 
+    if(typeof email === 'undefined' || typeof password === 'undefined') return res.sendStatus(400);
     // Search for corresponding email
     const user = await User.findOne({
         where: {
@@ -16,7 +17,7 @@ const checkLogin = async (req, res) => {
         bcrypt.compare(password, user.password, function (err, result) {
             if (result) {
                 jwt.sign({ nim: user.nim, role: user.role }, process.env.JWT_SECRET, function (err, token) {
-                    if (token) return res.status(200).send({ token: token })
+                    if (token) return res.json({ token: token })
                     else return res.status(500).send('jwt error');
                 })
 

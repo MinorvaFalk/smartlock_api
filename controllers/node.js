@@ -46,6 +46,23 @@ const checkActiveNode = async (req, res) => {
     return res.status(200);
 }
 
+const editNode = async (req, res) => {
+    const { id } = req.params;
+
+    const node = await Node.findByPk(id);
+
+    if (node === "null") return res.status(204)
+
+    node
+        .update(req.body, { where: { id: id } })
+        .then(async () => {
+            const node = await Node.findByPk(id)
+            return res.status(200).send(node)
+        })
+        .catch((err) => {
+            return res.sendStatus(500)
+        })
+}
 
 const checkRoom = async (req, res) => {
     const { id } = req.params;
@@ -61,7 +78,9 @@ const checkRoom = async (req, res) => {
     if (booking.length == 0) return res.sendStatus(204)
 
     if(!typeof booking[0].check_in === "undefined") {
+
         const response = booking[0].updateOne({ check_in: Date.now()})  
+
         if (response) return res.sendStatus(200)
         else return res.sendStatus(500)
     }
@@ -75,5 +94,6 @@ module.exports = {
     checkRoom,
     deleteSpecificNode,
     getAllNode,
-    getSpecificNode
+    getSpecificNode,
+    editNode
 }
