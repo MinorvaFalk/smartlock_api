@@ -38,9 +38,12 @@ const deleteSpecificBooking = async (req, res) => {
 
 
 const createNewBooking = async (req, res) => {
+    
     const start_date = new Date(req.body.start_date);
 
     const end_date = new Date(req.body.end_date);
+
+    if(end_date.getDay() - start_date.getDay() > 0 || (end_date.getHours() + 7) - (start_date.getHours()+7) > 2 ) return res.sendStatus(422)
 
     const booked_time = new Date(req.body.start_date);
 
@@ -48,11 +51,9 @@ const createNewBooking = async (req, res) => {
 
     const booked_room = await Booking.find({start_date: {$lte: start_date, $gte: booked_time}, duration: {$lte: 120, $gte: 60}, end_date: {$ne: start_date}});
 
-    console.log(booked_room)
-
     if (booked_room.length > 0) return res.status(422).json({message: "Time is not available"})
 
-    req.body.duration = (end_date.getHours() - start_date.getHours()) * 60;
+    req.body.duration = ((end_date.getHours() + 7) - (start_date.getHours()+7)) * 60;
 
     const booking = new Booking(req.body);
 
