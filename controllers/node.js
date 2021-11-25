@@ -37,13 +37,15 @@ const checkActiveNode = async (req, res) => {
 
     const node = await Node.findOne({where: {id: id}});
 
-    if (node === 'null') res.status(204) 
+    console.log(node)
+
+    if (node == null) return res.sendStatus(422) 
 
     node.status = 'active';
 
     await node.save()
 
-    return res.status(200);
+    return res.sendStatus(200);
 }
 
 const editNode = async (req, res) => {
@@ -51,7 +53,7 @@ const editNode = async (req, res) => {
 
     const node = await Node.findByPk(id);
 
-    if (node === "null") return res.status(204)
+    if (node == null ) return res.status(204)
 
     node
         .update(req.body, { where: { id: id } })
