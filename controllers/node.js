@@ -13,6 +13,8 @@ const getSpecificNode = async (req, res) => {
 }
 
 const createNode = async (req, res) => {
+    console.log(req.body.name)
+    if(typeof req.body.name == 'undefined') return res.sendStatus(422)
     let node = await Node.create(req.body);
     return res.status(200).json(node)
 }

@@ -16,7 +16,7 @@ const { nodeRequest } = require('../requests/nodeRequest');
 
 router.get('/', adminHandler, getAllNode)
 
-router.post('/create', adminHandler, createNode);
+router.post('/create', adminHandler, nodeRequest(), validate, createNode);
 
 router.put('/:id/edit', adminHandler, nodeRequest(), validate, editNode);
 
