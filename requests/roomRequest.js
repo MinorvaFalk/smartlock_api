@@ -12,11 +12,11 @@ let roomRequest = () => {
             }),
 
         body('capacity')
-            .not().isEmpty().withMessage('NIM Field is Required').bail()
+            .not().isEmpty().withMessage('Capacity is Required').bail()
             .isNumeric().withMessage('Must Be Numeric Value').bail(),
 
         body('NodeId')
-            .not().isEmpty().withMessage('Start Date Field is Required').bail()
+            .not().isEmpty().withMessage('NodeId is Required').bail()
             .isNumeric().withMessage('Must Be Numeric Value').bail()
             .custom(async (value) => {
                 let room = await Room.findAll({where: {NodeId: value}})
