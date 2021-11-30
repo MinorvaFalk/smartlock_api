@@ -1,4 +1,4 @@
-const { Node, Room } = require('../models');
+const { Node, Room, Sequelize } = require('../models');
 const Booking = require('../MongoModels/booking');
 
 const getAllNode = async (req, res) => {
@@ -44,6 +44,7 @@ const checkActiveNode = async (req, res) => {
     if (node == null) return res.sendStatus(422) 
 
     node.status = 'active';
+    node.last_check = Sequelize.literal('CURRENT_TIMESTAMP');
 
     await node.save()
 
