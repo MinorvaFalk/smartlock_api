@@ -11,7 +11,7 @@ client.on('error', function (error) {
 });
 
 cron.schedule('*/10 * * * *', async () => {
-    let node = await Node.update({ status: 'Not Active' },{where: {}})
+    await Node.update({ status: 'Not Active' },{where: {}})
     client.publish('node/check', 'hourly node check');
     console.log('node-run')
 
