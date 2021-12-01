@@ -13,9 +13,9 @@ module.exports = {
         allowNull: false,
       },
       version: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
         allowNull: false,
-        defaultValue: '1'
+        defaultValue: '1.0'
       },
       status: {
         type: Sequelize.STRING,

@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Node.init({
     name: DataTypes.STRING,
-    version: DataTypes.INTEGER,
+    version: DataTypes.DOUBLE,
     status: DataTypes.STRING,
     last_check: DataTypes.DATE
   }, {

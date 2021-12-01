@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+const cron = require('node-cron');
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -21,7 +22,7 @@ app.use(cors({origin: ['http://localhost:3000'], credentials: true}));
 app.use(morgan('tiny'))
 
 require('./mongo-connect');
-const {client} = require('./mqttHandler')
+
 
 app.use(logger)
 app.use('/api/users/', users)
@@ -39,25 +40,9 @@ app.get('*', (req, res) => {
   res.status(404).send('Routes not found')
 })
 
+require('./cron-job')
+
 app.listen(port, () => {
   console.log(`Server is listening on http://localhost:${port}`)
 })
 
-client.on('connect', function () {
-  console.log('Connected');
-});
-
-client.on('error', function (error) {
-  console.log(error);
-});
-
-client.on('message', function (topic, message) {
-  //Called each time a message is received
-  console.log('Received message:', topic, message.toString());
-});
-
-// subscribe to topic 'my/test/topic'
-client.subscribe('node/check');
-
-// // publish message 'Hello' to topic 'my/test/topic'
-// client.publish('my/test/topic', 'Hello');
