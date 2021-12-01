@@ -10,7 +10,7 @@ client.on('error', function (error) {
     console.log(error);
 });
 
-cron.schedule('*/15 * * * *', async () => {
+cron.schedule('*/2 * * * *', async () => {
     let node = await Node.update({ status: 'Not Active' },{where: {}})
     client.publish('node/check', 'hourly node check');
     console.log('node-run')
