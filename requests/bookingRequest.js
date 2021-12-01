@@ -4,7 +4,7 @@ const { Room, User } = require('../models/index');
 let bookingRequest = () => {
     return [
         body('room_id')
-            .not().isEmpty().withMessage('NIM Field is Required').bail()
+            .not().isEmpty().withMessage('Room_id is Required').bail()
             .isNumeric().withMessage('Must Be Numeric Value').bail()
             .custom(async value => {
                 let room = await Room.findAll({where: {id: value}})
