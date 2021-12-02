@@ -6,9 +6,11 @@ let roomRequest = () => {
         body('name')
             .not().isEmpty().withMessage('Name Field is Required').bail()
             .isAlpha().withMessage('Must Be Alpha Name').bail()
-            .custom(async value => {
+            .custom(async (value, {req}) => {
                 let room = await Room.findAll({where: {name: value}})
-                if(room.length > 0) return Promise.reject('Name Has Taken')
+                if(room.length > 0) {
+                    if(room[0].id != req.params.id) return Promise.reject('Name Has Taken')
+                }
             }),
 
         body('capacity')
@@ -18,9 +20,11 @@ let roomRequest = () => {
         body('NodeId')
             .not().isEmpty().withMessage('NodeId is Required').bail()
             .isNumeric().withMessage('Must Be Numeric Value').bail()
-            .custom(async (value) => {
+            .custom(async (value, {req}) => {
                 let room = await Room.findAll({where: {NodeId: value}})
-                if(room.length > 0) return Promise.reject('Room Found')
+                if(room.length > 0) {
+                    if(room[0].id != req.params.id) return Promise.reject('Room Found')
+                }
             }),
     ] 
 }

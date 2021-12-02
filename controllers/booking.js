@@ -28,7 +28,7 @@ const deleteSpecificBooking = async (req, res) => {
         return res.status(422).send('ID not found')
     }
 
-   const deleted = await Booking.deleteOne({id: _id});
+   const deleted = await Booking.deleteOne({_id: id});
 
    if(deleted.deletedCount < 1) return res.sendStatus(500)
 
@@ -78,7 +78,8 @@ const editBooking = async (req, res) => {
 }
 
 const editStatusBooking = async (req, res) => {
-    const { id, status } = req.params
+    const { id } = req.params
+    const { status } = req.body
 
     const singleBooking = await Booking.findById(id)
 

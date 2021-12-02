@@ -71,12 +71,15 @@ const editNode = async (req, res) => {
 
 const checkRoom = async (req, res) => {
     const { id } = req.params;
+    const { uid } = req.body
+
+    if(typeof id == undefined || id == null || typeof uid == undefined || uid == null) return res.sendStatus(422);
 
     const room = await Room.findOne({where: {
         NodeId: id
     }}) 
     
-    if (room === 'null') return res.sendStatus(204)
+    if (room == null) return res.sendStatus(204)
 
     const booking = await Booking.find({room_id: room.id, start_date: {$gte: new Date().toISOString()}, participants: req.body.uid});
 

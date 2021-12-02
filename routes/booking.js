@@ -35,7 +35,7 @@ router.get('/checkRoom', checkAvailability);
 router.get('/:id', getSpecificBooking)
 
 // Edit Specific Booking ID
-router.put('/:id', editBooking)
+router.put('/:id', bookingRequest(), validate, editBooking)
 
 // Approve/Edit Booking
 router.patch('/:id', adminHandler, editStatusBooking)
