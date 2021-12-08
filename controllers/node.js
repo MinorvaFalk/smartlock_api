@@ -8,7 +8,7 @@ const getAllNode = async (req, res) => {
 
 const getSpecificNode = async (req, res) => {
     let {id} = req.params;
-    const node = await Node.findOne({where: {id: id}},{ include: Room });
+    const node = await Node.findOne({where: {id: id}, include: Room});
     return res.status(200).send(node)
 }
 
