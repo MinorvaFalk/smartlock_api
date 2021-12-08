@@ -1,4 +1,5 @@
 const Booking = require('../MongoModels/booking');
+const { Room } = require('../models')
 const currentUserHandler = require('../middleware/currentUserHandler')
 
 const getAllBooking = async (req, res) => {
@@ -102,24 +103,43 @@ const checkAvailability = async (req, res) => {
         (start_time == null || typeof start_time == 'undefined') ||
         (end_time == null || typeof end_time == 'undefined')) return res.sendStatus(404)
 
+
     const book_time = new Date(date+'T'+start_time+'+0700');
+    const end_book_time = new Date(date+'T'+end_time+'+0700')
+
+    if( (end_book_time.getHours() + 7) - (book_time.getHours() + 7) > 2 || (book_time.getHours() + 7) > (end_book_time.getHours() + 7)) return res.sendStatus(404)
+
     const booked_time = new Date(date+'T'+start_time+'+0700');
 
     booked_time.setHours(-1)
 
-    const booked_room = await Booking.find({start_date: {$lte: book_time, $gte: booked_time}, duration: {$lte: 120, $gte: 60}, end_date: {$ne: book_time}});
+    let booked_room = await Booking.find({start_date: {$lte: book_time, $gte: booked_time}, duration: {$lte: 120, $gte: 60}, end_date: {$ne: book_time}}).distinct('room_id');
+    const rooms = await Room.findAll({attributes: ['id']});
+    
+    let attributes = ['id','name','capacity'];
 
-    if (booked_room) {
-        let booked_room_id = [];
+    let unbooked_room_id = [];
+    
+    booked_room = booked_room.map((item) => parseInt(item));
+
+    console.log(booked_room);
+
+    rooms.forEach((item) => {
+        unbooked_room_id.push(item.id);
+    })
+
+    if (booked_room.length > 0) {
+        console.log('booked');
+        let booked_room_id = unbooked_room_id.filter((item) => !booked_room.includes(item))
+
+        let booked_rooms = await Room.findAll({where: {id: booked_room_id}, attributes: attributes})
         
-        booked_room.forEach((booking) => {
-            booked_room_id.push(booking.room_id)
-        });
-        
-        return res.status(200).send({booked_room: booked_room_id});
+        return res.status(200).send({rooms: booked_rooms});
     }
+    
+    let unbooked_room = await Room.findAll({where: {id: unbooked_room_id}, attributes: attributes})
 
-    return res.sendStatus(200)
+    return res.status(200).send({room: unbooked_room})
 
 }
 
