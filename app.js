@@ -21,7 +21,7 @@ app.use(express.json())
 app.use(cors({origin: ['http://localhost:3000'], credentials: true}));
 app.use(morgan('tiny'))
 
-require('./mongo-connect');
+require('./db-connect');
 
 
 app.use(logger)

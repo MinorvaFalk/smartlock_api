@@ -2,13 +2,13 @@ const { Node, Room, Sequelize } = require('../models');
 const Booking = require('../MongoModels/booking');
 
 const getAllNode = async (req, res) => {
-    let node = await Node.findAll();
+    let node = await Node.findAll({ include: Room });
     return res.status(200).send(node);
 }
 
 const getSpecificNode = async (req, res) => {
     let {id} = req.params;
-    const node = await Node.findOne({where: {id: id}});
+    const node = await Node.findOne({where: {id: id}},{ include: Room });
     return res.status(200).send(node)
 }
 
