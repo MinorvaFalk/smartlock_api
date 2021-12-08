@@ -3,7 +3,7 @@ const { Room, Node } = require('../models');
 const getSpecificRoom = async (req, res) => {
     const { id } = req.params
 
-    const room = await Room.findByPk(id);
+    const room = await Room.findByPk(id, { include: Node });
 
     if (room == null) return res.sendStatus(422)
 
