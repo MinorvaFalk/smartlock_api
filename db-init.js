@@ -1,7 +1,8 @@
+require('dotenv').config()
 const env = process.env.enviroment || 'development';
 const { Client } = require('pg');
 var spawn = require('child_process').spawn;
-const config = require(__dirname + '/config/config.json')[env];
+const config = require(__dirname + '/config/config')[env];
 let options;
 
 if (process.env.enviroment == "development_heroku") {
