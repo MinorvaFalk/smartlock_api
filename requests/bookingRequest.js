@@ -24,16 +24,17 @@ let bookingRequest = () => {
             .not().isEmpty().withMessage('Participant is Required').bail()
             .custom(async value => {
                 let notId = false;
-                if(!value.isArray()) {
-                    let user = await User.findOne({where: {uid: item}})
+                if(!Array.isArray(value)) {
+                    let user = await User.findOne({where: {uid: value}})
                     if(user == null) notId = true
+                } else {
+                    value.forEach(async (item) => {
+                        console.log(item)
+                        let user = await User.findOne({where: {uid: item}})
+                        console.log(user)
+                        if (user == null) notId = true;
+                    })
                 }
-                value.forEach(async (item) => {
-                    console.log(item)
-                    let user = await User.findOne({where: {uid: item}})
-                    console.log(user)
-                    if (user == null) notId = true;
-                })
                 if(notId) return Promise.reject("UID Not Found")
             }),
 

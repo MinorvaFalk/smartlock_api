@@ -89,8 +89,7 @@ const editStatusBooking = async (req, res) => {
     }
 
     try {
-
-        const status = await Booking.updateOne({ status: status });
+        const booking = await Booking.updateOne({ status: status });
 
     } catch (err) {
 
