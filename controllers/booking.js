@@ -94,6 +94,7 @@ const editStatusBooking = async (req, res) => {
 
     } catch (err) {
 
+        console.log(err)
         return res.sendStatus(500);
 
     }
