@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Sequelize = require('sequelize');
 
 const env = process.env.enviroment || 'development';
-const config = require(__dirname + '/config/config.json')[env];
+const config = require(__dirname + '/config/config')[env];
 
 let sequelize;
 if (config.use_env_variable) {
