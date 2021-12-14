@@ -17,13 +17,7 @@ module.exports = {
     "dialect": "post"
   },
   "development_heroku": {
-    "username": process.env.PG_USERNAME,
-    "password": process.env.PG_PASSWORD,
-    "database": process.env.PG_DATABASE,
-    "host": process.env.PG_HOST,
-    "dialect": "postgres",
-    "port": "5432",
-    "protocol": "postgres",
+    "connectionString": process.env.DATABASE_URL,
     "dialectOptions": {
       "ssl": {
         "require": true,
