@@ -88,12 +88,16 @@ const editStatusBooking = async (req, res) => {
         return res.status(404).send('ID not found')
     }
 
-    Booking.updateOne({ status: status }, (err, res) => {
-        
-        if (err) return res.sendStatus(500);
+    try {
 
+        const status = await Booking.updateOne({ status: status });
+
+    } catch (err) {
+
+        return res.sendStatus(500);
+
+    }
         return res.status(200).send('Booking status updated');
-    })
 }
 
 const checkAvailability = async (req, res) => {
