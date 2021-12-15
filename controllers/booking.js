@@ -1,5 +1,5 @@
 const Booking = require('../MongoModels/booking');
-const { Room } = require('../models')
+const { Room, User } = require('../models')
 const currentUserHandler = require('../middleware/currentUserHandler')
 
 const getAllBooking = async (req, res) => {
@@ -13,7 +13,7 @@ const getSpecificBooking = async (req, res) => {
     const singleBooking = await Booking.findById(id)
 
     if (!singleBooking) {
-        return res.status(404).send('ID not found')
+        return res.status(422).send('ID not found')
     }
 
     return res.status(200).send(singleBooking)
@@ -66,16 +66,32 @@ const createNewBooking = async (req, res) => {
 
 const editBooking = async (req, res) => {
     const { id } = req.params
-
+    const { participant } = req.body
+    
     const singleBooking = await Booking.findById(id);
-
+    
+     if (!currentUserHandler(req, singleBooking)) {
+         return res.sendStatus(403);
+     }
+    
     if (!singleBooking) {
-        return res.status(404).send('ID not found')
+        return res.status(422).send('ID not found')
     }
 
-    if (!currentUserHandler(req, singleBooking)) {
-        return res.sendStatus(403);
+
+    try {
+
+        singleBooking.participant = participant
+        let booking = await singleBooking.save();
+        return res.status(200).send({message: 'Booking updated', booking: booking});
+
+    } catch (err) {
+
+        return res.sendStatus(500)
+
     }
+
+    
 }
 
 const editStatusBooking = async (req, res) => {
@@ -85,11 +101,14 @@ const editStatusBooking = async (req, res) => {
     const singleBooking = await Booking.findById(id)
 
     if (!singleBooking) {
-        return res.status(404).send('ID not found')
+        return res.status(422).send('ID not found')
     }
 
     try {
-        const booking = await Booking.updateOne({ status: status });
+        
+        singleBooking.status = status;
+        let booking = await singleBooking.save();
+        return res.status(200).send({message: 'Booking status updated', booking: booking});
 
     } catch (err) {
 
@@ -97,7 +116,6 @@ const editStatusBooking = async (req, res) => {
         return res.sendStatus(500);
 
     }
-        return res.status(200).send('Booking status updated');
 }
 
 const checkAvailability = async (req, res) => {
@@ -105,13 +123,13 @@ const checkAvailability = async (req, res) => {
 
     if ((date == null || typeof date == 'undefined') ||
         (start_time == null || typeof start_time == 'undefined') ||
-        (end_time == null || typeof end_time == 'undefined')) return res.sendStatus(404)
+        (end_time == null || typeof end_time == 'undefined')) return res.sendStatus(422)
 
 
     const book_time = new Date(date+'T'+start_time+'+0700');
     const end_book_time = new Date(date+'T'+end_time+'+0700')
 
-    if( (end_book_time.getHours() + 7) - (book_time.getHours() + 7) > 2 || (book_time.getHours() + 7) > (end_book_time.getHours() + 7)) return res.sendStatus(404)
+    if( (end_book_time.getHours() + 7) - (book_time.getHours() + 7) > 2 || (book_time.getHours() + 7) > (end_book_time.getHours() + 7)) return res.sendStatus(422)
 
     const booked_time = new Date(date+'T'+start_time+'+0700');
 

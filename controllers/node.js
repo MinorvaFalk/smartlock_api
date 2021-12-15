@@ -56,7 +56,9 @@ const editNode = async (req, res) => {
 
     const node = await Node.findByPk(id);
 
-    if (node == null ) return res.status(204)
+    console.log(node)
+
+    if (node == null) return res.sendStatus(422)
 
     node
         .update(req.body, { where: { id: id } })
