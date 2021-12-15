@@ -5,6 +5,8 @@ var spawn = require('child_process').spawn;
 const config = require(__dirname + '/config/config')[env];
 let options;
 
+console.log(config, env);
+
 if (process.env.enviroment == "development_heroku") {
     options = {
         connectionString: process.env.DATABASE_URL,

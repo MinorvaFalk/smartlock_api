@@ -16,11 +16,15 @@ const getAllUsers = async (req, res) => {
 const getSpecificUsers = async (req, res) => {
     const { nim } = req.params
 
-    const singleUser = await user.findAll({
+    const singleUser = await User.findAll(
+    {
         where: {
             nim: nim
-        }
+        },
+        attributes: ['nim', 'uid', 'first_name', 'last_name', 'email']
     })
+
+    console.log(singleUser)
 
     if(!singleUser) {
         return res.status(404).send('User not found')
