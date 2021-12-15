@@ -26,8 +26,8 @@ const getSpecificUsers = async (req, res) => {
 
     console.log(singleUser)
 
-    if(!singleUser) {
-        return res.status(404).send('User not found')
+    if(singleUser.length < 1) {
+        return res.status(204).send('User not found')
     }
 
     return res.status(200).json(singleUser)
