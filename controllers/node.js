@@ -83,9 +83,14 @@ const checkRoom = async (req, res) => {
     }}) 
     
     const book_start = new Date();
-    book_start.setHours(-2)
+    book_start.setHours(-1)
     const book_end = new Date();
-    book_end.setHours(+2)
+    book_end.setHours(+1)
+
+    console.log(book_start)
+
+    console.log(book_start.toISOString())
+    console.log(book_end.toISOString())
 
     if (room == null) return res.sendStatus(204)
 
