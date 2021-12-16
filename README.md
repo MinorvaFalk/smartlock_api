@@ -171,7 +171,7 @@ response:
   ```
 
   response: 
-  ```json
+  ```json5
     {
         "_id": string,
         "start_date": string,
@@ -185,6 +185,89 @@ response:
         "updatedAt": string,
         "__v": 0
     }
+  ```
+
+- Check room availability
+  endpoint: `/checkRoom`
+
+  method: `GET`
+
+  required: `user jwt`
+
+  query params: `?date=yyyy-mm-dd&start_time=00:00&end_time=00:00`
+
+  response:
+  ```json5
+    {
+    "room": [
+        {
+            "id": int,
+            "name": string,
+            "capacity": int
+        }
+    ]
+  ```
+
+- Get specific booking
+  endpoint: `/:id`
+  
+  method: `GET`
+  
+  required: `user jwt`
+
+  response:
+  ```json5
+    {
+        "_id": string,
+        "start_date": string,
+        "end_date": string,
+        "duration": int,
+        "room_id": string,
+        "status": string,
+        "user_booking_nim": string,
+        "participant": [string],
+        "createdAt": string,
+        "updatedAt": string,
+        "__v": 0
+    }
+  ```
+
+- edit specific booking
+  endpoint: `/:id`
+
+  method: `PUT`
+
+  required: `user jwt`
+
+  body: 
+  ```json5
+    {
+        "user_booking_nim": int,
+        "room_id": int,
+        "start_date": date,
+        "end_date": date,
+        "participant": [string]
+    }
+  ```
+
+  response:
+  ```json5
+  {
+    "message": string,
+    "booking": {
+        "_id": string,
+        "start_date": string,
+        "end_date": string,
+        "duration": int,
+        "room_id": string,
+        "status": string,
+        "user_booking_nim": string,
+        "participant": [string],
+        "createdAt": string,
+        "updatedAt": string,
+        "__v": int
+    }
+  }
   ```
 
 ## Booking
