@@ -88,6 +88,8 @@ const checkRoom = async (req, res) => {
 
     const booking = await Booking.find({room_id: room.id, start_date: {$gte: new Date().toISOString()}, participants: req.body.uid});
 
+    console.log(booking)
+    
     if (booking.length == 0) return res.sendStatus(204)
 
     if(!typeof booking[0].check_in === "undefined") {
