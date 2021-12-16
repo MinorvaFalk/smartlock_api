@@ -1,10 +1,12 @@
+require('dotenv').config();
+
 const mqtt = require('mqtt');
 const options = {
-    host: '54d8ff23e4294bcc971994bb72f83839.s1.eu.hivemq.cloud',
-    port: 8883,
-    protocol: 'mqtts',
-    username: 'smartlock',
-    password: 'Smartlock_pervasive2021'
+    host: process.env.MQTT_HOST,
+    port: process.env.MQTT_PORT,
+    protocol: process.env.MQTT_PROTOCOL,
+    username: process.env.MQTT_USERNAME,
+    password: process.env.MQTT_PASSWORD
 }
 const client = mqtt.connect(options)
 
