@@ -47,32 +47,145 @@ response:
 
 - login
 
-endpoint: `/login`
+    endpoint: `/login`
 
-method: `POST`
+    method: `POST`
 
-body: 
-```json
-{
-    "email": email,
-    "password": password
-}
-```
+    body: 
+    ```json
+    {
+        "email": email,
+        "password": password
+    }
+    ```
 
-  
-
-
-response: 
-```json
-{
-    "token": string
-}```
+    response: 
+    ```json
+    {
+        "token": string
+    }
+    ```
 
 - register
+  
+    method: `POST`
 
-endpoint: `/register`
+    endpoint: `/register`
 
-reponse: `user json`
+    body: 
+    ```json
+    {
+        "nim": int,
+        "uid": string,
+        "email": email,
+        "first_name": string,
+        "last_name": string,
+        "password": string
+    }
+    ```
+
+    reponse: 
+    ```json
+    {
+        "id": int,
+        "nim": string,
+        "uid": string,
+        "email": string,
+        "first_name": string,
+        "last_name": string,
+        "password": string,
+        "updatedAt": string,
+        "createdAt": string,
+        "role": string
+    }
+    ```
+
+## Booking - `/api/bookings`
+- Get All Booking
+    endpoint: `/`
+
+    method: `GET`
+
+    required: `user jwt`
+
+    response: 
+    ```json
+    [
+        {
+            "_id": string,
+            "start_date": string,
+            "end_date": string,
+            "duration": int,
+            "room_id": string,
+            "status": string,
+            "user_booking_nim": string,
+            "participant": [string],
+            "createdAt": string,
+            "updatedAt": string,
+            "__v": 0
+        }
+    ]
+    ```
+ 
+- Specific user booking
+  endpoint: `/user/:nim`
+
+  method: `GET`
+
+  params: `nim: int`
+
+  required: `user jwt`
+
+  reponse: 
+  ```json
+    {
+        "_id": string,
+        "start_date": string,
+        "end_date": string,
+        "duration": int,
+        "room_id": string,
+        "status": string,
+        "user_booking_nim": string,
+        "participant": [string],
+        "createdAt": string,
+        "updatedAt": string,
+        "__v": 0
+    }
+  ```
+- Add new booking
+  endpoint: `/`
+
+  method: `POST`
+
+  required: `user jwt`
+
+  body: 
+  ```json
+    {
+        "user_booking_nim": int,
+        "room_id": int,
+        "start_date": date,
+        "end_date": date,
+        "participant": [string]
+    }
+  ```
+
+  response: 
+  ```json
+    {
+        "_id": string,
+        "start_date": string,
+        "end_date": string,
+        "duration": int,
+        "room_id": string,
+        "status": string,
+        "user_booking_nim": string,
+        "participant": [string],
+        "createdAt": string,
+        "updatedAt": string,
+        "__v": 0
+    }
+  ```
 
 ## Booking
 
