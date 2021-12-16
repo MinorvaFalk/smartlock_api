@@ -22,22 +22,51 @@ if using docker is preferred
 - MongoDB
 
 ## API LIST
+## ADMIN - `/api/admin`
 
-## ADMIN
+method: 'GET'
 
 endpoint: `/data`
 
-required: `admin jwt`
+required: `admin role jwt`
 
-response: `json`
+response: 
+``` json
+[
+    {
+        "_id": {
+            "year": int,
+            "week": int
+        },
+        "start_date": Date,
+        "count": int
+    }
+```
 
-## AUTH
+## AUTH - `/api/auth`
 
 - login
-  
+
 endpoint: `/login`
 
-response: `jwt`
+method: `POST`
+
+body: 
+```json
+{
+    "email": email,
+    "password": password
+}
+```
+
+  
+
+
+response: 
+```json
+{
+    "token": string
+}```
 
 - register
 
