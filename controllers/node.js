@@ -87,14 +87,9 @@ const checkRoom = async (req, res) => {
     const book_end = new Date();
     book_end.setHours(+1)
 
-    console.log(book_start)
-
-    console.log(book_start.toISOString())
-    console.log(book_end.toISOString())
-
     if (room == null) return res.sendStatus(204)
 
-    const booking = await Booking.find({room_id: room.id, start_date: {$gte: book_start.toISOString()}, end_date: {$lte: book_end.toISOString()}, participants: req.body.uid});
+    const booking = await Booking.find({room_id: room.id, start_date: {$gte: book_start}, end_date: {$lte: book_end}, participants: req.body.uid});
 
     console.log(booking)
 
