@@ -31,7 +31,7 @@ endpoint: `/data`
 required: `admin role jwt`
 
 response: 
-``` json
+``` json5
 [
     {
         "_id": {
@@ -52,7 +52,7 @@ response:
     method: `POST`
 
     body: 
-    ```json
+    ```json5
     {
         "email": email,
         "password": password
@@ -60,7 +60,7 @@ response:
     ```
 
     response: 
-    ```json
+    ```json5
     {
         "token": string
     }
@@ -73,7 +73,7 @@ response:
     endpoint: `/register`
 
     body: 
-    ```json
+    ```json5
     {
         "nim": int,
         "uid": string,
@@ -85,7 +85,7 @@ response:
     ```
 
     reponse: 
-    ```json
+    ```json5
     {
         "id": int,
         "nim": string,
@@ -109,7 +109,7 @@ response:
     required: `user jwt`
 
     response: 
-    ```json
+    ```json5
     [
         {
             "_id": string,
@@ -137,7 +137,7 @@ response:
   required: `user jwt`
 
   reponse: 
-  ```json
+  ```json5
     {
         "_id": string,
         "start_date": string,
@@ -160,7 +160,7 @@ response:
   required: `user jwt`
 
   body: 
-  ```json
+  ```json5
     {
         "user_booking_nim": int,
         "room_id": int,
