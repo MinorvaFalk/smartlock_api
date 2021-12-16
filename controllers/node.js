@@ -83,9 +83,9 @@ const checkRoom = async (req, res) => {
     }}) 
     
     const book_start = new Date();
-    book_start.setHours(-2)
+    book_start.setHours(book_start.getHours() - 2)
     const book_end = new Date();
-    book_end.setHours(+2)
+    book_end.setHours(book_end.getHours() + 2)
 
     if (room == null) return res.sendStatus(204)
 
