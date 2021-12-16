@@ -82,14 +82,17 @@ const checkRoom = async (req, res) => {
         NodeId: id
     }}) 
     
-    console.log(room);
+    const book_start = new Date();
+    book_start.setHours(-2)
+    const book_end = new Date();
+    book_end.setHours(+2)
 
     if (room == null) return res.sendStatus(204)
 
-    const booking = await Booking.find({room_id: room.id, start_date: {$gte: new Date().toISOString()}, participants: req.body.uid});
+    const booking = await Booking.find({room_id: room.id, start_date: {$gte: book_start.toISOString()}, end_date: {$lte: book_end.toISOString()}, participants: req.body.uid});
 
     console.log(booking)
-    
+
     if (booking.length == 0) return res.sendStatus(204)
 
     if(!typeof booking[0].check_in === "undefined") {
