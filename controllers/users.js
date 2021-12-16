@@ -14,21 +14,27 @@ const getAllUsers = async (req, res) => {
 }
 
 const getSpecificUsers = async (req, res) => {
-    const { nim } = req.params
+    const { query } = req.params
 
-    const singleUser = await user.findAll({
+    const singleUser = await User.findAll(
+    {
         where: {
-            nim: nim
-        }
+            [Op.or]: [
+                {nim: query},
+                {uid: query}
+            ]
+        },
+        attributes: ['nim', 'uid', 'first_name', 'last_name', 'email']
     })
 
-    if(!singleUser) {
-        return res.status(404).send('User not found')
+    console.log(singleUser)
+
+    if(singleUser.length < 1) {
+        return res.status(204).send('User not found')
     }
 
     return res.status(200).json(singleUser)
 }
-
 
 const createUser = async (req, res) => {
 

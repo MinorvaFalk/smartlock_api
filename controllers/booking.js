@@ -1,4 +1,5 @@
 const Booking = require('../MongoModels/booking');
+const { Room, User } = require('../models')
 const currentUserHandler = require('../middleware/currentUserHandler')
 
 const getAllBooking = async (req, res) => {
@@ -12,7 +13,7 @@ const getSpecificBooking = async (req, res) => {
     const singleBooking = await Booking.findById(id)
 
     if (!singleBooking) {
-        return res.status(404).send('ID not found')
+        return res.status(422).send('ID not found')
     }
 
     return res.status(200).send(singleBooking)
@@ -28,7 +29,7 @@ const deleteSpecificBooking = async (req, res) => {
         return res.status(422).send('ID not found')
     }
 
-   const deleted = await Booking.deleteOne({id: _id});
+   const deleted = await Booking.deleteOne({_id: id});
 
    if(deleted.deletedCount < 1) return res.sendStatus(500)
 
@@ -65,33 +66,56 @@ const createNewBooking = async (req, res) => {
 
 const editBooking = async (req, res) => {
     const { id } = req.params
-
+    const { participant } = req.body
+    
     const singleBooking = await Booking.findById(id);
-
+    
+     if (!currentUserHandler(req, singleBooking)) {
+         return res.sendStatus(403);
+     }
+    
     if (!singleBooking) {
-        return res.status(404).send('ID not found')
+        return res.status(422).send('ID not found')
     }
 
-    if (!currentUserHandler(req, singleBooking)) {
-        return res.sendStatus(403);
+
+    try {
+
+        singleBooking.participant = participant
+        let booking = await singleBooking.save();
+        return res.status(200).send({message: 'Booking updated', booking: booking});
+
+    } catch (err) {
+
+        return res.sendStatus(500)
+
     }
+
+    
 }
 
 const editStatusBooking = async (req, res) => {
-    const { id, status } = req.params
+    const { id } = req.params
+    const { status } = req.body
 
     const singleBooking = await Booking.findById(id)
 
     if (!singleBooking) {
-        return res.status(404).send('ID not found')
+        return res.status(422).send('ID not found')
     }
 
-    Booking.updateOne({ status: status }, (err, res) => {
+    try {
         
-        if (err) return res.sendStatus(500);
+        singleBooking.status = status;
+        let booking = await singleBooking.save();
+        return res.status(200).send({message: 'Booking status updated', booking: booking});
 
-        return res.status(200).send('Booking status updated');
-    })
+    } catch (err) {
+
+        console.log(err)
+        return res.sendStatus(500);
+
+    }
 }
 
 const checkAvailability = async (req, res) => {
@@ -99,26 +123,45 @@ const checkAvailability = async (req, res) => {
 
     if ((date == null || typeof date == 'undefined') ||
         (start_time == null || typeof start_time == 'undefined') ||
-        (end_time == null || typeof end_time == 'undefined')) return res.sendStatus(404)
+        (end_time == null || typeof end_time == 'undefined')) return res.sendStatus(422)
+
 
     const book_time = new Date(date+'T'+start_time+'+0700');
+    const end_book_time = new Date(date+'T'+end_time+'+0700')
+
+    if( (end_book_time.getHours() + 7) - (book_time.getHours() + 7) > 2 || (book_time.getHours() + 7) > (end_book_time.getHours() + 7)) return res.sendStatus(422)
+
     const booked_time = new Date(date+'T'+start_time+'+0700');
 
     booked_time.setHours(-1)
 
-    const booked_room = await Booking.find({start_date: {$lte: book_time, $gte: booked_time}, duration: {$lte: 120, $gte: 60}, end_date: {$ne: book_time}});
+    let booked_room = await Booking.find({start_date: {$lte: book_time, $gte: booked_time}, duration: {$lte: 120, $gte: 60}, end_date: {$ne: book_time}}).distinct('room_id');
+    const rooms = await Room.findAll({attributes: ['id']});
+    
+    let attributes = ['id','name','capacity'];
 
-    if (booked_room) {
-        let booked_room_id = [];
+    let unbooked_room_id = [];
+    
+    booked_room = booked_room.map((item) => parseInt(item));
+
+    console.log(booked_room);
+
+    rooms.forEach((item) => {
+        unbooked_room_id.push(item.id);
+    })
+
+    if (booked_room.length > 0) {
+        console.log('booked');
+        let booked_room_id = unbooked_room_id.filter((item) => !booked_room.includes(item))
+
+        let booked_rooms = await Room.findAll({where: {id: booked_room_id}, attributes: attributes})
         
-        booked_room.forEach((booking) => {
-            booked_room_id.push(booking.room_id)
-        });
-        
-        return res.status(200).send({booked_room: booked_room_id});
+        return res.status(200).send({rooms: booked_rooms});
     }
+    
+    let unbooked_room = await Room.findAll({where: {id: unbooked_room_id}, attributes: attributes})
 
-    return res.sendStatus(200)
+    return res.status(200).send({room: unbooked_room})
 
 }
 

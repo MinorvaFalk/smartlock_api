@@ -1,18 +1,19 @@
-const { Node, Room } = require('../models');
+const { Node, Room, Sequelize } = require('../models');
 const Booking = require('../MongoModels/booking');
 
 const getAllNode = async (req, res) => {
-    let node = await Node.findAll();
+    let node = await Node.findAll({ include: Room });
     return res.status(200).send(node);
 }
 
 const getSpecificNode = async (req, res) => {
     let {id} = req.params;
-    const node = await Node.findOne({where: {id: id}});
+    const node = await Node.findOne({where: {id: id}, include: Room});
     return res.status(200).send(node)
 }
 
 const createNode = async (req, res) => {
+    if(typeof req.body.name == 'undefined') return res.sendStatus(422)
     let node = await Node.create(req.body);
     return res.status(200).json(node)
 }
@@ -42,6 +43,7 @@ const checkActiveNode = async (req, res) => {
     if (node == null) return res.sendStatus(422) 
 
     node.status = 'active';
+    node.last_check = Sequelize.literal('CURRENT_TIMESTAMP');
 
     await node.save()
 
@@ -53,7 +55,9 @@ const editNode = async (req, res) => {
 
     const node = await Node.findByPk(id);
 
-    if (node == null ) return res.status(204)
+    console.log(node)
+
+    if (node == null) return res.sendStatus(422)
 
     node
         .update(req.body, { where: { id: id } })
@@ -68,12 +72,15 @@ const editNode = async (req, res) => {
 
 const checkRoom = async (req, res) => {
     const { id } = req.params;
+    const { uid } = req.body
+
+    if(typeof id == undefined || id == null || typeof uid == undefined || uid == null) return res.sendStatus(422);
 
     const room = await Room.findOne({where: {
         NodeId: id
     }}) 
     
-    if (room === 'null') return res.sendStatus(204)
+    if (room == null) return res.sendStatus(204)
 
     const booking = await Booking.find({room_id: room.id, start_date: {$gte: new Date().toISOString()}, participants: req.body.uid});
 

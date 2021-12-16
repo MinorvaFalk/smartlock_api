@@ -4,7 +4,7 @@ const { Room, User } = require('../models/index');
 let bookingRequest = () => {
     return [
         body('room_id')
-            .not().isEmpty().withMessage('NIM Field is Required').bail()
+            .not().isEmpty().withMessage('Room_id is Required').bail()
             .isNumeric().withMessage('Must Be Numeric Value').bail()
             .custom(async value => {
                 let room = await Room.findAll({where: {id: value}})
@@ -16,8 +16,23 @@ let bookingRequest = () => {
             .isNumeric().withMessage('Must Be Numeric Value').bail()
             .custom(async value => {
                 let user = await User.findAll({where: {nim: value}})
-                console.log(user)
                 if(!user.length > 0) return Promise.reject('nim is not found')
+            }),
+
+        body('participant')
+            .not().isEmpty().withMessage('Participant is Required').bail()
+            .custom(async value => {
+                let notId = false;
+                if(!Array.isArray(value)) {
+                    let user = await User.findOne({where: {uid: value}})
+                    if(user == null) notId = true
+                } else {
+                    value.forEach(async (item) => {
+                        let user = await User.findOne({where: {uid: item}})
+                        if (user == null) notId = true;
+                    })
+                }
+                if(notId) return Promise.reject("UID Not Found")
             }),
 
         body('start_date')

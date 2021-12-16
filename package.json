@@ -6,7 +6,7 @@
   "scripts": {
     "init": "node db-init.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "node db-init.js && nodemon app.js",
     "server": "json-server --watch db.json --port 5000"
   },
   "keywords": [],
@@ -23,6 +23,7 @@
     "mongoose": "^6.0.8",
     "morgan": "^1.10.0",
     "mqtt": "^4.2.8",
+    "node-cron": "^3.0.0",
     "nodemon": "^2.0.13",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",

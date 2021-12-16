@@ -1,8 +1,16 @@
+const jwt = require('jsonwebtoken');
+
 const currentUserHandler = (req, data) => {
-    const { id } = req.params;
-    const model = req.originalUrl.replace('/api/', '');
-    if(model === 'bookings') {
-        if(data.user_booking_nim == id) return true
+    let nim;
+    const req_token = req.headers['authorization'];
+    const token = req_token.split(' ')[1];
+    jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+        nim = decoded.nim
+        
+    });
+    const model = req.originalUrl.split('/');
+    if(model[2] === 'bookings') {
+        if(data.user_booking_nim == nim) return true
         else return false 
     }
     return false
