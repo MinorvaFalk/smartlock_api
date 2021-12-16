@@ -14,12 +14,15 @@ const getAllUsers = async (req, res) => {
 }
 
 const getSpecificUsers = async (req, res) => {
-    const { nim } = req.params
+    const { query } = req.params
 
     const singleUser = await User.findAll(
     {
         where: {
-            nim: nim
+            [Op.or]: [
+                {nim: query},
+                {uid: query}
+            ]
         },
         attributes: ['nim', 'uid', 'first_name', 'last_name', 'email']
     })
@@ -32,7 +35,6 @@ const getSpecificUsers = async (req, res) => {
 
     return res.status(200).json(singleUser)
 }
-
 
 const createUser = async (req, res) => {
 

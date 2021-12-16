@@ -21,3 +21,31 @@ if using docker is preferred
 - Postgresql
 - MongoDB
 
+## API LIST
+
+## ADMIN
+
+endpoint: `/data`
+
+required: `admin jwt`
+
+response: `json`
+
+## AUTH
+
+- login
+  
+endpoint: `/login`
+
+response: `jwt`
+
+- register
+
+endpoint: `/register`
+
+reponse: `user json`
+
+## Booking
+
+
+
