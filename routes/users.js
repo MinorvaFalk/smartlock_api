@@ -20,7 +20,7 @@ router.get('/', getAllUsers)
 router.post('/create', adminHandler, userRequest(), validate, createUser)
   
 // Get specific nim
-router.get('/:nim', getSpecificUsers)
+router.get('/:query', getSpecificUsers)
 
 
 
