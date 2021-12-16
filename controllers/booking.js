@@ -161,7 +161,7 @@ const checkAvailability = async (req, res) => {
     
     let unbooked_room = await Room.findAll({where: {id: unbooked_room_id}, attributes: attributes})
 
-    return res.status(200).send({room: unbooked_room})
+    return res.status(200).send({rooms: unbooked_room})
 
 }
 

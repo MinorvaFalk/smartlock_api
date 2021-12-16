@@ -95,15 +95,15 @@ const checkRoom = async (req, res) => {
 
     if (booking.length == 0) return res.sendStatus(204)
 
-    if(!typeof booking[0].check_in === "undefined") {
+    booking[0].check_in = new Date()
 
-        const response = booking[0].updateOne({ check_in: Date.now()})  
+    const response = await booking[0].save()
 
-        if (response) return res.sendStatus(200)
-        else return res.sendStatus(500)
-    }
+    console.log(response)
 
-    return res.sendStatus(200)
+    if (response) return res.sendStatus(200)
+    else return res.sendStatus(500)
+
 }
 
 module.exports = {
